@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generative AI Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1 class="main-heading">Generative AI Project</h1>
+        <p class="subtitle">GPT-powered Chatbot with Voice and Memory</p>
+    </header>
+
+    <!-- Technologies Section -->
+    <section class="technologies">
+        <h2 class="tech-heading">Technologies Used</h2>
+        <div class="tech-logos">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask" onclick="showName('Flask')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python" onclick="showName('Python')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript" onclick="showName('JavaScript')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML" onclick="showName('HTML')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS" onclick="showName('CSS')">
+        </div>
+        <p id="tech-name"></p>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="chat">
+        <div id="chat-box"></div>
+        <div class="chat-controls">
+            <input type="text" id="message-input" placeholder="Type your message..." onkeydown="checkEnter(event)">
+            <button id="send-btn" onclick="sendMessage()">Send</button>
+            <button onclick="startListening()">🎤</button>
+        </div>
+        <div class="chat-actions">
+            <button onclick="retryMessage()">Retry</button>
+            <button onclick="undoMessage()">Undo</button>
+            <button onclick="clearChat()">Clear</button>
+        </div>
+    </section>
+    <div class="share-section">
+    <div class="share-heading">Share on</div>
+
+    <div class="share-icons">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" onclick="shareWhatsApp()" />
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" onclick="shareInstagram()" />
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" onclick="shareLinkedIn()" />
+    </div>
+</div>
+
+    <!-- Scripts -->
+    <script>
+        function showName(name){
+            document.getElementById('tech-name').innerText = name;
+        }
+
+        function checkEnter(e){
+            if(e.key === "Enter") sendMessage();
+        }
+
+        function sendMessage(){
+            const input = document.getElementById('message-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+            const chatBox = document.getElementById('chat-box');
+            const p = document.createElement('p');
+            p.className = 'user-msg';
+            p.innerText = "You: " + msg;
+            chatBox.appendChild(p);
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function retryMessage(){
+            alert("Retry clicked! (Connect to backend later)");
+        }
+
+        function undoMessage(){
+            const chatBox = document.getElementById('chat-box');
+            if(chatBox.lastChild) chatBox.removeChild(chatBox.lastChild);
+        }
+
+        function clearChat(){
+            document.getElementById('chat-box').innerHTML = '';
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
