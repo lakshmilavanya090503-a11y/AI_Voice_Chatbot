@@ -1,0 +1,169 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: #e8f6f5; /* light teal */
+    color: #1f3d3b;
+}
+
+/* Header */
+header .main-heading {
+    font-size: 2.8em;
+    color: #0f766e; /* dark teal */
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+header .subtitle {
+    font-size: 1.2em;
+    color: #4b6e6b;
+    margin-bottom: 30px;
+}
+
+/* Technologies */
+.technologies .tech-heading {
+    font-size: 1.6em;
+    color: #134e4a;
+    margin-bottom: 15px;
+}
+
+.tech-logos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tech-logos img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    padding: 8px;
+    background: #ffffff;
+    transition: 0.3s;
+}
+
+.tech-logos img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#tech-name {
+    margin-top: 10px;
+    font-weight: 500;
+    color: #0f766e;
+}
+
+/* Chat Section */
+.chat {
+    width: 65%;
+    margin: auto;
+}
+
+#chat-box {
+    background: #ffffff;
+    height: 300px;
+    border-radius: 12px;
+    padding: 15px;
+    overflow-y: auto;
+    text-align: left;
+    border: 1px solid #cde5e3;
+}
+
+/* Messages */
+.user-msg {
+    background: #0f766e;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 18px;
+    display: inline-block;
+    float: right;
+    clear: both;
+    margin: 5px 0;
+}
+
+.ai-msg {
+    background: #d1f0ed;
+    color: #134e4a;
+    padding: 8px 14px;
+    border-radius: 18px;
+    display: inline-block;
+    float: left;
+    clear: both;
+    margin: 5px 0;
+}
+
+/* Input */
+.chat-controls {
+    margin-top: 10px;
+}
+
+#message-input {
+    width: 60%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #bcdedb;
+    outline: none;
+}
+
+#send-btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #0f766e;
+    color: white;
+    cursor: pointer;
+}
+
+#send-btn:hover {
+    background: #115e59;
+}
+
+/* Action Buttons */
+.chat-actions button {
+    margin: 5px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #0f766e;
+    background: transparent;
+    color: #0f766e;
+    cursor: pointer;
+}
+
+.chat-actions button:hover {
+    background: #0f766e;
+    color: white;
+}
+
+/* Share Section */
+.share-section {
+    margin-top: 40px;
+}
+
+.share-heading {
+    font-size: 1.2em;
+    color: #134e4a;
+    margin-bottom: 10px;
+}
+
+.share-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.share-icons img {
+    width: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.share-icons img:hover {
+    transform: scale(1.15);
+}
+
+.share-icons img {
+    filter: grayscale(20%);
+    margin-bottom: 40px;
+}
