@@ -93,3 +93,19 @@ function speak(text) {
     speech.lang = "en-US";
     window.speechSynthesis.speak(speech);
 }
+
+const PROJECT_URL = "https://ai-voice-chatbot-zu75.onrender.com";
+function shareWhatsApp() {
+    const text = `Check out my project 🚀: ${PROJECT_URL}`;
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+}
+function shareLinkedIn() {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(PROJECT_URL)}`;
+    window.open(url, "_blank");
+}
+function shareInstagram() {
+    navigator.clipboard.writeText(PROJECT_URL);
+    alert("Link copied! Now paste it on Instagram 🔥");
+}
+
