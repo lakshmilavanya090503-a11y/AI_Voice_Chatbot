@@ -63,18 +63,7 @@
             if(e.key === "Enter") sendMessage();
         }
 
-        function sendMessage(){
-            const input = document.getElementById('message-input');
-            const msg = input.value.trim();
-            if(!msg) return;
-            const chatBox = document.getElementById('chat-box');
-            const p = document.createElement('p');
-            p.className = 'user-msg';
-            p.innerText = "You: " + msg;
-            chatBox.appendChild(p);
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        
 
         function retryMessage(){
             alert("Retry clicked! (Connect to backend later)");
