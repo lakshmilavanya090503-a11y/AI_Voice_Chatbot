@@ -1,4 +1,4 @@
-const BASE_URL = "http://10.53.170.168:5000";
+const BASE_URL = "https://ai-voice-chatbot-zu75.onrender.com";
 
 function appendMessage(text, className) {
     const chatBox = document.getElementById("chat-box");
