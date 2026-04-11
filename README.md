@@ -84,6 +84,12 @@ http://127.0.0.1:5000
 
 ---
 
+## 🚀 Live Project
+
+Try it here 👉 [Open Chat App](https://ai-voice-chatbot-zu75.onrender.com)
+
+---
+
 🎯 Future Improvements
 
 - 🌐 Deploy online
