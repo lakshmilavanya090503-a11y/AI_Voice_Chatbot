@@ -19,26 +19,14 @@ function sendMessage() {
 
     fetch(`${BASE_URL}/chat`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
     })
-    .then(async (res) => {
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-        const reply = data.reply || "No reply";
-        appendMessage(reply, "ai-msg");
-        speak(reply);
+        appendMessage(data.reply, "ai-msg");
     })
-    .catch(err => {
-        console.error(err);
-        appendMessage("Error: backend not reachable", "ai-msg");
-    });
+    .catch(err => console.log(err));
 }
 
 function retryMessage() {
@@ -120,4 +108,3 @@ function shareInstagram() {
     navigator.clipboard.writeText(PROJECT_URL);
     alert("Link copied! Now paste it on Instagram 🔥");
 }
-
