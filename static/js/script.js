@@ -19,16 +19,26 @@ function sendMessage() {
 
     fetch(`${BASE_URL}/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({ message })
     })
-    .then(res => res.json())
+    .then(async (res) => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+    })
     .then(data => {
         const reply = data.reply || "No reply";
         appendMessage(reply, "ai-msg");
         speak(reply);
     })
-    .catch(err => appendMessage("Error: " + err, "ai-msg"));
+    .catch(err => {
+        console.error(err);
+        appendMessage("Error: backend not reachable", "ai-msg");
+    });
 }
 
 function retryMessage() {
@@ -75,7 +85,6 @@ function clearChat() {
 
 function startListening() {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-
     recognition.lang = "en-US";
 
     recognition.onresult = function(event) {
@@ -95,15 +104,18 @@ function speak(text) {
 }
 
 const PROJECT_URL = "https://ai-voice-chatbot-zu75.onrender.com";
+
 function shareWhatsApp() {
     const text = `Check out my project 🚀: ${PROJECT_URL}`;
     const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
 }
+
 function shareLinkedIn() {
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(PROJECT_URL)}`;
     window.open(url, "_blank");
 }
+
 function shareInstagram() {
     navigator.clipboard.writeText(PROJECT_URL);
     alert("Link copied! Now paste it on Instagram 🔥");
