@@ -85,12 +85,32 @@ function startListening() {
 }
 
 function speak(text) {
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    window.speechSynthesis.speak(speech);
-}
+    if (!text) return;
 
+    // stop previous speech
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = "en-US";
+    speech.rate = 1;
+    speech.pitch = 1;
+    speech.volume = 1;
+
+    // wait for voices to load properly (VERY IMPORTANT for laptop)
+    let voices = window.speechSynthesis.getVoices();
+
+    if (voices.length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+            speech.voice = voices.find(v => v.lang.includes("en")) || null;
+            window.speechSynthesis.speak(speech);
+        };
+    } else {
+        speech.voice = voices.find(v => v.lang.includes("en")) || null;
+        window.speechSynthesis.speak(speech);
+    }
+}
 const PROJECT_URL = "https://ai-voice-chatbot-zu75.onrender.com";
 
 function shareWhatsApp() {
@@ -107,4 +127,7 @@ function shareLinkedIn() {
 function shareInstagram() {
     navigator.clipboard.writeText(PROJECT_URL);
     alert("Link copied! Now paste it on Instagram 🔥");
+}
+function stopSpeaking() {
+    window.speechSynthesis.cancel();
 }
