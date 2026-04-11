@@ -1,4 +1,4 @@
-const API_URL = "/chat";
+const BASE_URL = "http://10.53.170.168:5000";
 
 function appendMessage(text, className) {
     const chatBox = document.getElementById("chat-box");
@@ -17,52 +17,60 @@ function sendMessage() {
     appendMessage(message, "user-msg");
     input.value = "";
 
-    fetch(API_URL, {
+    fetch(`${BASE_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
     })
     .then(res => res.json())
     .then(data => {
-    const reply = data.reply || "No reply";
-    appendMessage(reply, "ai-msg");
-    speak(reply); // 🔊 AI speaks here
-})
+        const reply = data.reply || "No reply";
+        appendMessage(reply, "ai-msg");
+        speak(reply);
+    })
     .catch(err => appendMessage("Error: " + err, "ai-msg"));
 }
 
 function retryMessage() {
-    fetch("http://127.0.0.1:5000/retry", { method: "POST" })
+    fetch(`${BASE_URL}/retry`, { method: "POST" })
         .then(res => res.json())
         .then(data => {
-            // remove last AI message
             const chatBox = document.getElementById("chat-box");
             const messages = chatBox.querySelectorAll("div.ai-msg");
-            if (messages.length) chatBox.removeChild(messages[messages.length - 1]);
+
+            if (messages.length) {
+                chatBox.removeChild(messages[messages.length - 1]);
+            }
+
             appendMessage(data.reply || "No reply", "ai-msg");
-        });
+            speak(data.reply || "");
+        })
+        .catch(err => console.log(err));
 }
 
 function undoMessage() {
-    fetch("http://127.0.0.1:5000/undo", { method: "POST" })
+    fetch(`${BASE_URL}/undo`, { method: "POST" })
         .then(res => res.json())
         .then(data => {
             if (data.status === "ok") {
                 const chatBox = document.getElementById("chat-box");
                 const messages = chatBox.querySelectorAll("div");
+
                 if (messages.length >= 2) {
                     chatBox.removeChild(messages[messages.length - 1]);
                     chatBox.removeChild(messages[messages.length - 1]);
                 }
             }
-        });
+        })
+        .catch(err => console.log(err));
 }
 
 function clearChat() {
-    fetch("http://127.0.0.1:5000/clear", { method: "POST" })
+    fetch(`${BASE_URL}/clear`, { method: "POST" })
         .then(() => {
             document.getElementById("chat-box").innerHTML = "";
-        });
+        })
+        .catch(err => console.log(err));
 }
 
 function startListening() {
@@ -73,18 +81,14 @@ function startListening() {
     recognition.onresult = function(event) {
         const speechText = event.results[0][0].transcript;
         document.getElementById("message-input").value = speechText;
-        sendMessage(); // auto send
+        sendMessage();
     };
 
     recognition.start();
 }
+
 function speak(text) {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    window.speechSynthesis.speak(speech);
-}
-function speak(text) {
-    window.speechSynthesis.cancel(); // stop previous speech
+    window.speechSynthesis.cancel();
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     window.speechSynthesis.speak(speech);
