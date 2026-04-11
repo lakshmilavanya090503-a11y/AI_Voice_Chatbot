@@ -49,7 +49,7 @@ ai-voice-chatbot/
 
 1️⃣ Clone the repository
 
-git clone https://github.com/your-username/ai-voice-chatbot.git
+git clone: https://github.com/lakshmilavanya090503-a11y/AI_Voice_Chatbot.git
 cd ai-voice-chatbot
 
 ---
