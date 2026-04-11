@@ -4,7 +4,7 @@ import os
 import requests
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 chat_history = []
 
@@ -13,11 +13,11 @@ def home():
     return render_template("index.html")
 
 def query_ai(user_message):
+
     try:
         api_key = os.getenv("OPENROUTER_API_KEY")
 
-        if not api_key:
-            return "❌ API key missing"
+        print("KEY START:", api_key[:10] if api_key else "None")  # 👈 PUT IT HERE
 
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -47,7 +47,6 @@ def query_ai(user_message):
     except Exception as e:
         print("🔥 ERROR:", str(e))
         return "⚠️ Server error"
-
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json.get("message", "").strip()
