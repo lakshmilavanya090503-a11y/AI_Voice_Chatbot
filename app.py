@@ -14,10 +14,15 @@ def home():
 
 def query_ai(user_message):
     try:
+        api_key = os.getenv("OPENROUTER_API_KEY")
+
+        if not api_key:
+            return "❌ API key missing"
+
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
             json={
@@ -25,21 +30,23 @@ def query_ai(user_message):
                 "messages": [
                     {"role": "user", "content": user_message}
                 ]
-            }
+            },
+            timeout=15   # 🔥 IMPORTANT FIX
         )
 
-        data = response.json()
-        print("DEBUG:", data)
+        print("STATUS:", response.status_code)
+        print("TEXT:", response.text)
 
-        if "choices" in data:
-            return data["choices"][0]["message"]["content"]
-        else:
-            print("API ERROR:", data)
-            return "⚠️ API error, check terminal"
+        if response.status_code != 200:
+            return f"⚠️ API Error {response.status_code}"
+
+        data = response.json()
+
+        return data["choices"][0]["message"]["content"]
 
     except Exception as e:
-        print("🔥 OpenRouter error:", e)
-        return "⚠️ Error getting response"
+        print("🔥 ERROR:", str(e))
+        return "⚠️ Server error"
 
 @app.route("/chat", methods=["POST"])
 def chat():
