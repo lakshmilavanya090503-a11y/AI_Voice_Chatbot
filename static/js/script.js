@@ -25,6 +25,7 @@ function sendMessage() {
     .then(res => res.json())
     .then(data => {
         appendMessage(data.reply, "ai-msg");
+        speak(data.reply); 
     })
     .catch(err => console.log(err));
 }
@@ -87,30 +88,46 @@ function startListening() {
 function speak(text) {
     if (!text) return;
 
-    // stop previous speech
+    if (!window.speechSynthesis) {
+        alert("Speech not supported in this browser");
+        return;
+    }
+
     window.speechSynthesis.cancel();
 
     const speech = new SpeechSynthesisUtterance(text);
-
     speech.lang = "en-US";
     speech.rate = 1;
     speech.pitch = 1;
     speech.volume = 1;
 
-    // wait for voices to load properly (VERY IMPORTANT for laptop)
+    function setVoiceAndSpeak() {
+        const voices = window.speechSynthesis.getVoices();
+
+        
+        const selectedVoice =
+            voices.find(v => v.name.includes("Google US English")) || // Chrome female
+            voices.find(v => v.name.includes("Microsoft Zira")) ||    // Windows female
+            voices.find(v => v.name.includes("Female")) ||            // fallback female
+            voices[0]; // final fallback
+
+        speech.voice = selectedVoice;
+        window.speechSynthesis.speak(speech);
+    }
+
     let voices = window.speechSynthesis.getVoices();
 
     if (voices.length === 0) {
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-            speech.voice = voices.find(v => v.lang.includes("en")) || null;
-            window.speechSynthesis.speak(speech);
-        };
+        window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
     } else {
-        speech.voice = voices.find(v => v.lang.includes("en")) || null;
-        window.speechSynthesis.speak(speech);
+        setVoiceAndSpeak();
     }
 }
+
+function stopSpeaking() {
+    window.speechSynthesis.cancel();
+}
+
 const PROJECT_URL = "https://ai-voice-chatbot-zu75.onrender.com";
 
 function shareWhatsApp() {
@@ -127,7 +144,4 @@ function shareLinkedIn() {
 function shareInstagram() {
     navigator.clipboard.writeText(PROJECT_URL);
     alert("Link copied! Now paste it on Instagram 🔥");
-}
-function stopSpeaking() {
-    window.speechSynthesis.cancel();
 }
