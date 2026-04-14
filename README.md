@@ -78,12 +78,6 @@ python app.py
 
 ---
 
-5️⃣ Open in browser
-
-http://192.168.0.9:5000
-
----
-
 ## 🚀 Live Project
 
 Try it here 👉 [Open Chat App](https://ai-voice-chatbot-zu75.onrender.com)
