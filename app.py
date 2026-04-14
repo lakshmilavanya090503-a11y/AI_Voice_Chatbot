@@ -17,7 +17,7 @@ def query_ai(user_message):
     try:
         api_key = os.getenv("OPENROUTER_API_KEY")
 
-        print("KEY START:", api_key[:10] if api_key else "None")  # 👈 PUT IT HERE
+        print("KEY START:", api_key[:10] if api_key else "None") 
 
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -31,7 +31,7 @@ def query_ai(user_message):
                     {"role": "user", "content": user_message}
                 ]
             },
-            timeout=15   # 🔥 IMPORTANT FIX
+            timeout=15 
         )
 
         print("STATUS:", response.status_code)
