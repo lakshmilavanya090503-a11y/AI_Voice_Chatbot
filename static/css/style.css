@@ -63,7 +63,7 @@ header .subtitle {
 
 #chat-box {
     background: #ffffff;
-    height: 300px;
+    height: 500px;
     border-radius: 12px;
     padding: 15px;
     overflow-y: auto;
@@ -101,10 +101,11 @@ header .subtitle {
 
 #message-input {
     width: 60%;
-    padding: 10px;
+    padding: 12px;
     border-radius: 20px;
     border: 1px solid #bcdedb;
     outline: none;
+    font-size: 16px;
 }
 
 #send-btn {
@@ -166,4 +167,20 @@ header .subtitle {
 .share-icons img {
     filter: grayscale(20%);
     margin-bottom: 40px;
+}
+.ai-msg, .user-msg {
+    padding: 14px 14px;   
+    margin: 12px 0;       
+    border-radius: 10px;
+    line-height: 1.7;    
+    max-width: 75%;
+}
+
+.ai-msg {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.user-msg {
+    margin-left: auto;
 }
