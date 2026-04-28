@@ -17,7 +17,7 @@ function sendMessage() {
     appendMessage(message, "user-msg");
     input.value = "";
 
-    fetch(`/chat`, {
+    fetch(`/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
