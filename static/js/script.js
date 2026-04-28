@@ -1,4 +1,4 @@
-const BASE_URL = "https://ai-voice-chatbot-zu75.onrender.com";
+const BASE_URL = "";
 
 function appendMessage(text, className) {
     const chatBox = document.getElementById("chat-box");
@@ -17,7 +17,7 @@ function sendMessage() {
     appendMessage(message, "user-msg");
     input.value = "";
 
-    fetch(`${BASE_URL}/chat`, {
+    fetch(`/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
@@ -31,7 +31,7 @@ function sendMessage() {
 }
 
 function retryMessage() {
-    fetch(`${BASE_URL}/retry`, { method: "POST" })
+    fetch(`/retry`, { method: "POST" })
         .then(res => res.json())
         .then(data => {
             const chatBox = document.getElementById("chat-box");
@@ -48,7 +48,7 @@ function retryMessage() {
 }
 
 function undoMessage() {
-    fetch(`${BASE_URL}/undo`, { method: "POST" })
+    fetch(`/undo`, { method: "POST" })
         .then(res => res.json())
         .then(data => {
             if (data.status === "ok") {
@@ -65,7 +65,7 @@ function undoMessage() {
 }
 
 function clearChat() {
-    fetch(`${BASE_URL}/clear`, { method: "POST" })
+    fetch(`/clear`, { method: "POST" })
         .then(() => {
             document.getElementById("chat-box").innerHTML = "";
         })
@@ -128,7 +128,7 @@ function stopSpeaking() {
     window.speechSynthesis.cancel();
 }
 
-const PROJECT_URL = "https://ai-voice-chatbot-zu75.onrender.com";
+const PROJECT_URL = "window.location.origin";
 
 function shareWhatsApp() {
     const text = `Check out my project 🚀: ${PROJECT_URL}`;
