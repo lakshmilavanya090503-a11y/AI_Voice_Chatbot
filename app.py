@@ -2,22 +2,31 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os
 import requests
+import time
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+
+# 🔒 Restrict CORS (IMPORTANT)
+CORS(app, resources={r"/chat": {"origins": "*"}})
+
+# 🔒 Rate Limiter (CRITICAL)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["20 per minute"]
+)
 
 chat_history = []
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "Chatbot running 🚀"
 
 def query_ai(user_message):
-
     try:
         api_key = os.getenv("OPENROUTER_API_KEY")
-
-        print("KEY START:", api_key[:10] if api_key else "None") 
 
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -31,28 +40,30 @@ def query_ai(user_message):
                     {"role": "user", "content": user_message}
                 ]
             },
-            timeout=15 
+            timeout=10
         )
 
-        print("STATUS:", response.status_code)
-        print("TEXT:", response.text)
-
         if response.status_code != 200:
-            return f"⚠️ API Error {response.status_code}"
+            return "⚠️ API error"
 
         data = response.json()
-
         return data["choices"][0]["message"]["content"]
 
-    except Exception as e:
-        print("🔥 ERROR:", str(e))
+    except Exception:
         return "⚠️ Server error"
+
 @app.route("/chat", methods=["POST"])
+@limiter.limit("5 per minute")   # 🔥 VERY IMPORTANT
 def chat():
     user_message = request.json.get("message", "").strip()
 
     if not user_message:
-        return jsonify({"reply": "Please enter a message"})
+        return jsonify({"reply": "Enter a message"})
+
+    if len(user_message) > 300:   # 🔒 Prevent abuse
+        return jsonify({"reply": "Message too long"})
+
+    time.sleep(1)  # 🔒 Anti-spam delay
 
     ai_reply = query_ai(user_message)
 
@@ -63,31 +74,11 @@ def chat():
 
     return jsonify({"reply": ai_reply})
 
-@app.route("/retry", methods=["POST"])
-def retry():
-    if not chat_history:
-        return jsonify({"reply": "No previous message to retry."})
-
-    last_user = chat_history[-1]["user"]
-    ai_reply = query_ai(last_user)
-
-    chat_history[-1]["ai"] = ai_reply
-
-    return jsonify({"reply": ai_reply})
-
-@app.route("/undo", methods=["POST"])
-def undo():
-    if chat_history:
-        chat_history.pop()
-        return jsonify({"status": "ok"})
-    return jsonify({"status": "empty"})
-
 @app.route("/clear", methods=["POST"])
 def clear():
     chat_history.clear()
     return jsonify({"status": "cleared"})
 
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
